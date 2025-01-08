@@ -1,9 +1,10 @@
-package com.jamme.dev.dyanmic.search.dyanmic.search.service;
+package com.jamme.dev.dyanmic.search.dyanmic.search.service.impl;
 
 import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.dto.CustomerIndex;
 import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.repository.CustomerIndexRepository;
 import com.jamme.dev.dyanmic.search.dyanmic.search.model.Customer;
 import com.jamme.dev.dyanmic.search.dyanmic.search.repository.CustomerRepository;
+import com.jamme.dev.dyanmic.search.dyanmic.search.service.CustomerMigrationService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class CustomerMigrationServiceImpl implements CustomerMigrationService{
+public class CustomerMigrationServiceImpl implements CustomerMigrationService {
 
     private final CustomerRepository customerRepository;
     private final CustomerIndexRepository elasticCustomerRepository;
