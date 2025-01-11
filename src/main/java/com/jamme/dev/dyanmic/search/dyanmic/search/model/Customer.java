@@ -2,36 +2,43 @@ package com.jamme.dev.dyanmic.search.dyanmic.search.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Entity(name = "customer")
 @Table(name = "customer")
 @Getter
+@NoArgsConstructor
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id", nullable = false)
     private Long id;
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @Column(name = "gender", nullable = false)
-    private String gender;
-
-    @Column(name = "ip_address", nullable = false)
-    private String ipAddress;
+    @Column(name = "customer_number", nullable = false, unique = true)
+    private String customerNumber;
 
     @Column(name = "kycStatus", nullable = false)
     private String kycStatus;
 
-    @Column(name = "amount", nullable = false)
-    private String amount;
+    @Column(name = "is_alive", nullable = false)
+    private Boolean isAlive;
+
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerProduct> customerProducts;
+
+    public Customer(String name,
+                    String customerNumber,
+                    String kycStatus,
+                    Boolean isAlive) {
+        this.name = name;
+        this.customerNumber = customerNumber;
+        this.kycStatus = kycStatus;
+        this.isAlive = isAlive;
+    }
 }

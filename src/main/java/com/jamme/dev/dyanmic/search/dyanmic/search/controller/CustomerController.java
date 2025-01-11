@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = CustomerController.API_PATH, produces = "application/json")
@@ -21,12 +20,6 @@ public class CustomerController {
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
-
-    /***
-     * Approach 1: Building a Free Text Search
-     * Approach 2: Is to build a natural language parsing
-     */
-
 
     @PostMapping("/search")
     public List<CustomerIndex> searchCustomers(@RequestBody String query) {

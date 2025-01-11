@@ -1,33 +1,29 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search.service.impl;
 
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.dto.CustomerIndex;
 import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.repository.CustomerIndexRepository;
-import com.jamme.dev.dyanmic.search.dyanmic.search.model.Customer;
-import com.jamme.dev.dyanmic.search.dyanmic.search.repository.CustomerRepository;
+import com.jamme.dev.dyanmic.search.dyanmic.search.repository.CustomerRepo;
 import com.jamme.dev.dyanmic.search.dyanmic.search.service.CustomerMigrationService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @Slf4j
 public class CustomerMigrationServiceImpl implements CustomerMigrationService {
 
-    private final CustomerRepository customerRepository;
+    private final CustomerRepo customerRepo;
     private final CustomerIndexRepository elasticCustomerRepository;
 
-    public CustomerMigrationServiceImpl(CustomerRepository customerRepository,
+    public CustomerMigrationServiceImpl(CustomerRepo customerRepo,
                                         CustomerIndexRepository elasticCustomerRepository) {
-        this.customerRepository = customerRepository;
+        this.customerRepo = customerRepo;
         this.elasticCustomerRepository = elasticCustomerRepository;
     }
 
     @Override
     @Transactional
     public void migrateCustomersToElasticsearch() {
-
+/*
         log.info("Customer Migration Initiated");
 
         List<Customer> customers = customerRepository.findAll();
@@ -47,6 +43,8 @@ public class CustomerMigrationServiceImpl implements CustomerMigrationService {
         elasticCustomerRepository.saveAll(customerIndices);
 
         log.info("Customer Migration Completed");
+
+ */
 
     }
 
