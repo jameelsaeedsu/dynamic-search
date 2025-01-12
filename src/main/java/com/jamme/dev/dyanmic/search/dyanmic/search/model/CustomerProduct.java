@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "customer_product")
+@Entity
 @Table(name = "customer_product")
 @Getter
 @NoArgsConstructor

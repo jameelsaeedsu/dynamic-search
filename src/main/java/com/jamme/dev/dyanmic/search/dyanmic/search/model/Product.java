@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity(name = "product")
+@Entity
 @Table(name = "product")
 @Getter
 @NoArgsConstructor

@@ -1,9 +1,9 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search.service;
 
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.dto.CustomerIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.CustomersIndex;
 
 import java.util.List;
 
 public interface CustomerService {
-    List<CustomerIndex> searchCustomersByQuery(String query);
+    List<CustomersIndex> searchCustomersByQuery(String query);
 }

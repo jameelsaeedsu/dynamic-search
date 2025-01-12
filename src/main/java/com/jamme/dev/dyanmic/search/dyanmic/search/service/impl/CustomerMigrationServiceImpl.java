@@ -1,52 +1,69 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search.service.impl;
 
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.repository.CustomerIndexRepository;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.AssetIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.CustomersIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.ProductIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.repository.CustomersIndexRepository;
+import com.jamme.dev.dyanmic.search.dyanmic.search.model.Customer;
+import com.jamme.dev.dyanmic.search.dyanmic.search.model.ProductDetails;
 import com.jamme.dev.dyanmic.search.dyanmic.search.repository.CustomerRepo;
 import com.jamme.dev.dyanmic.search.dyanmic.search.service.CustomerMigrationService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class CustomerMigrationServiceImpl implements CustomerMigrationService {
 
     private final CustomerRepo customerRepo;
-    private final CustomerIndexRepository elasticCustomerRepository;
+    private final CustomersIndexRepository customersIndexRepository;
 
     public CustomerMigrationServiceImpl(CustomerRepo customerRepo,
-                                        CustomerIndexRepository elasticCustomerRepository) {
+                                        CustomersIndexRepository customersIndexRepository) {
         this.customerRepo = customerRepo;
-        this.elasticCustomerRepository = elasticCustomerRepository;
+        this.customersIndexRepository = customersIndexRepository;
     }
 
     @Override
     @Transactional
-    public void migrateCustomersToElasticsearch() {
-/*
-        log.info("Customer Migration Initiated");
+    public CustomersIndex mapToCustomersIndex(Customer customer) {
 
-        List<Customer> customers = customerRepository.findAll();
-        List<CustomerIndex> customerIndices = customers.stream()
-                .map(customer -> {
-                    CustomerIndex index = new CustomerIndex();
-                    index.setId(customer.getId());
-                    index.setFirstName(customer.getFirstName());
-                    index.setLastName(customer.getLastName());
-                    index.setEmail(customer.getEmail());
-                    index.setGender(customer.getGender());
-                    index.setIpAddress(customer.getIpAddress());
-                    index.setKycStatus(customer.getKycStatus());
-                    return index;
-                }).toList();
+        List<ProductIndex> products = customer.getCustomerProducts().stream()
+                .map(customerProduct -> {
+                    ProductDetails productDetails = customerProduct.getProductDetails();
+                    return new ProductIndex(
+                            customerProduct.getProduct().getName(),
+                            productDetails.getBalance(),
+                            productDetails.getStatus(),
+                            productDetails.getAssets().stream()
+                                    .map(asset -> new AssetIndex(asset.getType(), asset.getName(), asset.getBalance()))
+                                    .toList()
+                    );
+                })
+                .toList();
 
-        elasticCustomerRepository.saveAll(customerIndices);
-
-        log.info("Customer Migration Completed");
-
- */
+        return new CustomersIndex(
+                customer.getCustomerNumber(),
+                customer.getName(),
+                customer.getKycStatus(),
+                customer.getIsAlive(),
+                products
+        );
 
     }
+
+    /*
+        public void indexCustomers(List<Customer> customers) {
+        List<CustomerIndex> customerIndexes = customers.stream()
+                .map(this::mapToCustomerIndex)
+                .toList();
+
+        elasticsearchTemplate.save(customerIndexes);
+    }
+     */
 
 
 }

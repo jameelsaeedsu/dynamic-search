@@ -1,17 +1,22 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search;
 
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.AssetIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.CustomersIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.ProductIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.repository.CustomersIndexRepository;
 import com.jamme.dev.dyanmic.search.dyanmic.search.model.*;
 import com.jamme.dev.dyanmic.search.dyanmic.search.repository.*;
 import com.jamme.dev.dyanmic.search.dyanmic.search.service.CustomerMigrationService;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
+@Slf4j
 public class Application {
 
 	private final CustomerRepo customerRepo;
@@ -19,28 +24,38 @@ public class Application {
     private final ProductDetailsRepo productDetailsRepo;
     private final CustomerProductRepo customerProductRepo;
     private final AssetRepo assetRepo;
+    private final CustomersIndexRepository customersIndexRepository;
+    private final CustomerMigrationService customerMigrationService;
 
-    public Application(CustomerRepo customerRepo, ProductRepo productRepo, ProductDetailsRepo productDetailsRepo, CustomerProductRepo customerProductRepo, AssetRepo assetRepo) {
+    public Application(CustomerRepo customerRepo,
+                       ProductRepo productRepo,
+                       ProductDetailsRepo productDetailsRepo,
+                       CustomerProductRepo customerProductRepo,
+                       AssetRepo assetRepo,
+                       CustomersIndexRepository customersIndexRepository,
+                       CustomerMigrationService customerMigrationService) {
         this.customerRepo = customerRepo;
         this.productRepo = productRepo;
         this.productDetailsRepo = productDetailsRepo;
         this.customerProductRepo = customerProductRepo;
         this.assetRepo = assetRepo;
+        this.customersIndexRepository = customersIndexRepository;
+        this.customerMigrationService = customerMigrationService;
     }
 
     public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@PostConstruct
-	private void createCustomers() {
+    @PostConstruct
+    private void createCustomers() {
 
         Product iskKonto = new Product("ISK Konto");
         productRepo.save(iskKonto);
 
-		Customer customer1 = new Customer("John Doe", "199702280000", "WHITE", true);
-		Customer customer2 = new Customer("Jane Smith", "19980326000", "RED", true);
-		Customer customer3 = new Customer("Alice Johnson", "200101020909", "GREEN", true);
+        Customer customer1 = new Customer("John Doe", "199702280000", "WHITE", true);
+        Customer customer2 = new Customer("Jane Smith", "19980326000", "RED", true);
+        Customer customer3 = new Customer("Alice Johnson", "200101020909", "GREEN", true);
 
         customerRepo.saveAll(List.of(customer1, customer2, customer3));
 
@@ -71,10 +86,57 @@ public class Application {
 
         customerProductRepo.saveAll(List.of(customerProductCustomer1, customerProductCustomer3, customerProductCustomer33));
 
-
+        createCustomerIndex(customer1, iskKontoCustomer1, iskKonto);
+        createCustomerIndex(customer2, iskKontoCustomer2, iskKonto);
+        createCustomerIndex(customer3, iskKontoCustomer3, iskKonto);
 
     }
 
+    private void createCustomerIndex(Customer customer, ProductDetails productDetails, Product product) {
+        ProductIndex productIndex = new ProductIndex();
+        productIndex.setProductName(product.getName());
+        productIndex.setBalance(productDetails.getBalance());
+        productIndex.setStatus(productDetails.getStatus());
 
+        List<AssetIndex> assetIndexes = productDetails.getAssets().stream()
+                .map(asset -> {
+                    AssetIndex assetIndex = new AssetIndex();
+                    assetIndex.setType(asset.getType());
+                    assetIndex.setName(asset.getName());
+                    assetIndex.setBalance(asset.getBalance());
+                    return assetIndex;
+                }).toList();
+
+        productIndex.setAssets(assetIndexes);
+
+        CustomersIndex customerIndex = new CustomersIndex();
+        customerIndex.setCustomerNumber(customer.getCustomerNumber());
+        customerIndex.setName(customer.getName());
+        customerIndex.setKycStatus(customer.getKycStatus());
+        customerIndex.setIsAlive(customer.getIsAlive());
+        customerIndex.setProducts(List.of(productIndex));
+
+        customersIndexRepository.save(customerIndex);
+    }
+
+
+    /*
+    public void migrateCustomersFromSqlToElasticsearch() {
+        try {
+            List<Customer> customers = customerRepo.findCustomerWithProductsAndDetails();
+
+            List<CustomersIndex> customersIndices = customers.stream()
+                    .map(customerMigrationService::mapToCustomersIndex)
+                    .toList();
+
+            customersIndexRepository.saveAll(customersIndices);
+            log.info("Successfully migrated customers to Elasticsearch");
+        } catch (Exception e) {
+            log.error("Error during customer migration", e);
+            throw new RuntimeException(e);
+        }
+
+    }
+     */
 
 }

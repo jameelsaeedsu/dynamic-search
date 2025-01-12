@@ -2,15 +2,17 @@ package com.jamme.dev.dyanmic.search.dyanmic.search.model;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "product_details")
+@Entity
 @Table(name = "product_details")
 @NoArgsConstructor
+@Getter
 public class ProductDetails {
 
     @Id

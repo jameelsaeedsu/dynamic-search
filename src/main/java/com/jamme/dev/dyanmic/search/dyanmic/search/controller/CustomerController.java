@@ -1,6 +1,6 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search.controller;
 
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.dto.CustomerIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.CustomersIndex;
 import com.jamme.dev.dyanmic.search.dyanmic.search.service.CustomerService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +22,7 @@ public class CustomerController {
     }
 
     @PostMapping("/search")
-    public List<CustomerIndex> searchCustomers(@RequestBody String query) {
+    public List<CustomersIndex> searchCustomers(@RequestBody String query) {
         return customerService.searchCustomersByQuery(query);
     }
 
