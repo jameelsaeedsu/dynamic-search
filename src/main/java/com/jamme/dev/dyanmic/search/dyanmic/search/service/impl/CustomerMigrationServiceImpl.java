@@ -1,8 +1,8 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search.service.impl;
 
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.AssetIndex;
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.CustomersIndex;
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.ProductIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.model.AssetIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.model.CustomersIndex;
+import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.model.ProductIndex;
 import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.repository.CustomersIndexRepository;
 import com.jamme.dev.dyanmic.search.dyanmic.search.model.Customer;
 import com.jamme.dev.dyanmic.search.dyanmic.search.model.ProductDetails;

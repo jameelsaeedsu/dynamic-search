@@ -1,4 +1,4 @@
-package com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index;
+package com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

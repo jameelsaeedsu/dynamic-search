@@ -1,19 +1,11 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search;
 
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.AssetIndex;
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.CustomersIndex;
-import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.index.ProductIndex;
 import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.repository.CustomersIndexRepository;
-import com.jamme.dev.dyanmic.search.dyanmic.search.model.*;
 import com.jamme.dev.dyanmic.search.dyanmic.search.repository.*;
 import com.jamme.dev.dyanmic.search.dyanmic.search.service.CustomerMigrationService;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @SpringBootApplication
 @Slf4j
@@ -47,7 +39,7 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-    @PostConstruct
+    /*
     private void createCustomers() {
 
         Product iskKonto = new Product("ISK Konto");
@@ -118,6 +110,8 @@ public class Application {
 
         customersIndexRepository.save(customerIndex);
     }
+
+ */
 
 
     /*

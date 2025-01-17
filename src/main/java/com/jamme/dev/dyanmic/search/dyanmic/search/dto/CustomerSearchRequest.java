@@ -1,11 +1,21 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search.dto;
 
-public record CustomerSearchRequest(
-        String firstName,
-        String lastName,
-        String email,
-        String gender,
-        String ipAddress,
-        String kycStatus
-) {
+import lombok.Getter;
+
+@Getter
+public class CustomerSearchRequest {
+
+    private ProductFilter productFilter;
+    private AssetFilter assetFilter;
+
+    @Getter
+    public static class ProductFilter {
+        private String productName;
+    }
+
+    @Getter
+    public static class AssetFilter {
+        private String name;
+    }
+
 }
