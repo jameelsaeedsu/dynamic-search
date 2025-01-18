@@ -1,5 +1,6 @@
 package com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.service;
 
+import com.jamme.dev.dyanmic.search.dyanmic.search.dto.CustomerDTO;
 import com.jamme.dev.dyanmic.search.dyanmic.search.dto.CustomerSearchRequest;
 import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.model.CustomersIndex;
 
@@ -9,6 +10,6 @@ import java.util.Map;
 
 public interface CustomersIndexService {
 
-    List<CustomersIndex> search(CustomerSearchRequest customerSearchRequest) throws IOException;
+    List<CustomerDTO> search(CustomerSearchRequest customerSearchRequest) throws IOException;
 
 }

@@ -6,10 +6,10 @@ import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
+import com.jamme.dev.dyanmic.search.dyanmic.search.dto.CustomerDTO;
 import com.jamme.dev.dyanmic.search.dyanmic.search.dto.CustomerSearchRequest;
 import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.model.CustomersIndex;
 import com.jamme.dev.dyanmic.search.dyanmic.search.elasticsearch.service.CustomersIndexService;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,13 +26,20 @@ public class CustomersIndexServiceImpl implements CustomersIndexService {
 
 
     @Override
-    public List<CustomersIndex> search(CustomerSearchRequest request) throws IOException {
+    public List<CustomerDTO> search(CustomerSearchRequest request) throws IOException {
         SearchRequest searchRequest = buildSearchRequest(request);
         SearchResponse<CustomersIndex> searchResponse = elasticsearchClient.search(searchRequest, CustomersIndex.class);
 
-        return searchResponse.hits().hits().stream()
+        List<CustomersIndex> customersIndexList = searchResponse.hits().hits().stream()
                 .map(Hit::source)
                 .toList();
+
+        return customersIndexList.stream()
+                .map(customersIndex -> new CustomerDTO(
+                        customersIndex.getCustomerNumber(),
+                        customersIndex.getName(),
+                        customersIndex.getKycStatus())
+                ).toList();
     }
 
     private SearchRequest buildSearchRequest(CustomerSearchRequest request) {
